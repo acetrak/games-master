@@ -1,12 +1,13 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { SearchForm } from "@/components/search-form";
-import { VersionSwitcher } from "@/components/version-switcher";
-import { NavUser } from "@/components/nav-user";
-import { Link } from "@remix-run/react";
+import { SearchForm } from '@/components/search-form';
+import { VersionSwitcher } from '@/components/version-switcher';
+import { NavUser } from '@/components/nav-user';
+import { Link, useLocation } from '@remix-run/react';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -15,24 +16,23 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-  SidebarFooter,
-} from "@/components/ui/sidebar";
+} from '@/components/ui/sidebar';
 
 // This is sample data.
 const data = {
-  versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
+  versions: ['1.0.1', '1.1.0-alpha', '2.0.0-beta1'],
   navMain: [
     {
-      title: "Getting Started",
-      url: "",
+      title: 'Getting Started',
+      url: '',
       items: [
         {
-          title: "List of Deals",
-          url: "/list-of-deals",
+          title: 'List of Deals',
+          url: '/list-of-deals',
         },
         {
-          title: "Stores",
-          url: "/stores",
+          title: 'Stores',
+          url: '/stores',
         },
       ],
     },
@@ -40,6 +40,10 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+
+  const location = useLocation();
+ 
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -58,7 +62,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.isActive}>
+                    <SidebarMenuButton asChild isActive={item.url === location.pathname}>
                       <Link to={item.url}>{item.title}</Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -71,9 +75,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <NavUser
           user={{
-            name: "shadcn",
-            email: "m@example.com",
-            avatar: "/avatars/shadcn.jpg",
+            name: 'shadcn',
+            email: 'm@example.com',
+            avatar: '/avatars/shadcn.jpg',
           }}
         />
       </SidebarFooter>

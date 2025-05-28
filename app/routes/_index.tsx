@@ -1,8 +1,8 @@
 export default function Index() {
   return (
     <div>
-Index
+      Index
 
     </div>
-  )
+  );
 }

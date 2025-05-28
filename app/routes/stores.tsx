@@ -1,6 +1,7 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from '@remix-run/react';
+
 export async function loader() {
-  const res = await fetch("https://www.cheapshark.com/api/1.0/stores");
+  const res = await fetch('https://www.cheapshark.com/api/1.0/stores');
 
   return await res.json();
 }
@@ -13,7 +14,7 @@ function Stores() {
         {data.map((item: any) => (
           <div
             className=" border-2 rounded-2xl p-4 flex flex-col items-center cursor-pointer"
-            key={item.storeId}
+            key={item.storeID}
           >
             <img
               src={`https://www.cheapshark.com${item.images.logo}`}

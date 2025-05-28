@@ -1,6 +1,6 @@
-export default function ListOfGames(){
-        return (
-                <div>
-                </div>
-        )
+export default function ListOfGames() {
+  return (
+    <div>
+    </div>
+  );
 }

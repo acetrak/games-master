@@ -1,20 +1,20 @@
-import { useLoaderData } from "@remix-run/react";
-import type { MetaFunction } from "@remix-run/node";
+import { useLoaderData } from '@remix-run/react';
+import type { MetaFunction } from '@remix-run/node';
 
 export const meta: MetaFunction = () => {
-  return [{ title: "游戏管家" }, { name: "description", content: "游戏管家" }];
+  return [{ title: '游戏管家' }, { name: 'description', content: '游戏管家' }];
 };
 
 export const loader = async () => {
   const res = await fetch(
-    "https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=15"
+    'https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=15'
   );
   return await res.json();
 };
 
 export default function Index() {
   const data = useLoaderData<typeof loader>();
-  console.log(data);
+
   return (
     <div className="min-h-screen p-4">
       {data.map((item: any) => (
