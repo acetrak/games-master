@@ -1,4 +1,4 @@
-import { useLoaderData, useLocation } from '@remix-run/react';
+import { Outlet, useLoaderData, useLocation, useNavigate, useParams } from '@remix-run/react';
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import qs from 'qs';
 import { GameDeal, Store } from '~/lib/data';
@@ -41,6 +41,10 @@ export default function Index() {
   const data = useLoaderData<typeof loader>();
 
   const location = useLocation();
+  const params = useParams()
+  console.log(params)
+
+  const navigate = useNavigate()
 
   const store = useMemo<Store>(() => location.state?.store ?? defaultStore, [location.state?.store]);
 
@@ -51,10 +55,15 @@ export default function Index() {
   }
 
   const visitDeal = (item: GameDeal) => {
-
-    console.log(item);
+    navigate(`/list-of-deals/${item.dealID}`, {
+      state: {
+        store: store,
+        item: item
+      }
+    })
   }
 
+  console.log(location.state)
   return (
     <>
       <div className=" p-4">

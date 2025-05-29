@@ -1,8 +1,3 @@
-export default function Index() {
-  return (
-    <div>
-      Index
+import { redirect } from "@remix-run/node";
 
-    </div>
-  );
-}
+export const loader = () => redirect("/list-of-deals");

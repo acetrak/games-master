@@ -1,7 +1,7 @@
 import { Outlet, useNavigation } from '@remix-run/react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import NProgress from 'nprogress';
 import NavHeader from '~/components/nav-header';
 
