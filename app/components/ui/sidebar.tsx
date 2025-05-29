@@ -5,7 +5,6 @@ import { PanelLeftIcon } from 'lucide-react';
 
 import { useIsMobile } from '~/hooks/use-mobile';
 import { cn } from '~/lib/utils';
-import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Separator } from '~/components/ui/separator';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, } from '~/components/ui/sheet';
@@ -29,7 +28,7 @@ type SidebarContextProps = {
   toggleSidebar: () => void
 }
 
-const SidebarContext = React.createContext<SidebarContextProps | null>(null);
+export const SidebarContext = React.createContext<SidebarContextProps | null>(null);
 
 function useSidebar() {
   const context = React.useContext(SidebarContext);
@@ -244,25 +243,24 @@ function SidebarTrigger({
                           className,
                           onClick,
                           ...props
-                        }: React.ComponentProps<typeof Button>) {
+                        }: React.ComponentProps<'button'>) {
   const { toggleSidebar } = useSidebar();
 
   return (
-    <Button
+    <button
       data-sidebar="trigger"
-      data-slot="sidebar-trigger"
-      variant="ghost"
-      size="icon"
-      className={cn('size-7', className)}
-      onClick={(event) => {
-        onClick?.(event);
-        toggleSidebar();
-      }}
-      {...props}
+      data-slot="sidebar-trigger" onClick={(event) => {
+      onClick?.(event);
+      toggleSidebar();
+    }}
+      {...props} className={cn(className, 'w-fit h-fit rounded-full transition-all p-1 lg:p-3 bg-zinc-300 dark:bg-zinc-700 cursor-pointer hover:bg-zinc-400 hover:dark:bg-zinc-900')}
     >
       <PanelLeftIcon />
       <span className="sr-only">Toggle Sidebar</span>
-    </Button>
+
+    </button>
+
+
   );
 }
 
@@ -313,7 +311,7 @@ function SidebarInput({
     <Input
       data-slot="sidebar-input"
       data-sidebar="input"
-      className={cn('bg-background h-8 w-full shadow-none', className)}
+      className={cn('bg-background h-8 lg:h-10 w-full shadow-none', className)}
       {...props}
     />
   );

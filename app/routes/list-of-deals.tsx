@@ -1,13 +1,36 @@
-import { useLoaderData } from '@remix-run/react';
-import type { MetaFunction } from '@remix-run/node';
+import { Link, useLoaderData, useLocation } from '@remix-run/react';
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import qs from 'qs';
+import { GameDeal, Store } from '~/lib/data';
+import { useMemo } from 'react';
+import SortBy from '~/components/sort-by';
 
 export const meta: MetaFunction = () => {
   return [{ title: '游戏管家' }, { name: 'description', content: '游戏管家' }];
 };
 
-export const loader = async () => {
+const defaultStore = {
+  'storeID': '1',
+  'storeName': 'Steam',
+  'isActive': 1,
+  'images': {
+    'banner': '/img/stores/banners/0.png',
+    'logo': '/img/stores/logos/0.png',
+    'icon': '/img/stores/icons/0.png'
+  }
+};
+export const loader = async ({ request }: LoaderFunctionArgs): Promise<GameDeal[]> => {
+
+  const url = new URL(request.url);
+  const storeID = url.searchParams.get('storeID');
+  const sortBy = url.searchParams.get('sortBy');
+
+  const query = qs.stringify({
+    storeID: storeID ?? defaultStore.storeID,
+    sortBy: sortBy ?? 'DealRating',
+  });
   const res = await fetch(
-    'https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=15'
+    `https://www.cheapshark.com/api/1.0/deals?${query}`
   );
   return await res.json();
 };
@@ -15,15 +38,72 @@ export const loader = async () => {
 export default function Index() {
   const data = useLoaderData<typeof loader>();
 
-  return (
-    <div className="min-h-screen p-4">
-      {data.map((item: any) => (
-        <div key={item.dealID} className="my-2 px-2 border-2 border-zinc-600 dark:border-zinc-300 rounded-md cursor-pointer">
-          <h3 className="text-zinc-800 dark:text-zinc-300">{item.title}</h3>
+  const location = useLocation();
 
-          <img src={item.thumb} alt="" className="w-[120px]" />
+  const store = useMemo<Store>(() => location.state?.store ?? defaultStore, [location.state?.store]);
+
+  console.log(store);
+
+  return (
+    <>
+      <div className=" p-4">
+
+        {
+          store && (
+            <div className="flex justify-center pb-10">
+              <img src={`https://www.cheapshark.com${store.images.banner}`} className="w-[160px] h-[80px] object-contain" alt={store.storeName} />
+            </div>
+          )
+        }
+
+        <div className="max-w-5xl mx-auto">
+          {
+
+            data.length === 0 ? (
+              <div className="text-center text-zinc-500 p-10 border-1 border-zinc-500">
+                <h1 className="text-[3rem] pb-2">😢</h1>
+                <p>No relevant game transactions found</p>
+              </div>
+            ) : (
+
+              <div className="grid grid-cols-[1fr_300px] gap-x-4">
+
+                <div className="">
+                  <div className="flex flex-col gap-y-6">
+
+                    {data.map((item) => (
+                      <Link rel="noreferrer" target="_blank" to={`https://www.cheapshark.com/redirect?dealID=${item.dealID}`} key={item.dealID} className=" py-4 flex px-2 border-1 border-zinc-300 dark:border-zinc-600   cursor-pointer">
+
+                        <img src={item.thumb} alt="" className="w-[180px] shrink-0" />
+                        <div className="flex-1 pl-3 flex flex-col justify-between">
+                          <h3 className="text-left text-zinc-800 dark:text-zinc-300 ">{item.title}</h3>
+
+                          <div className="flex items-center gap-x-4">
+                            <p className="text-green-600">${item.salePrice}</p>
+                            <p className="text-zinc-500 line-through">${item.normalPrice}</p>
+                            <p className="bg-green-600 text-white px-1 py-[2px] text-xs rounded-sm">save: {Number(item.savings).toFixed(0)}%</p>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="sticky top-[120px]">
+                    <h3 className="text-zinc-800 dark:text-zinc-300 pb-2">SortBy</h3>
+                    <SortBy></SortBy>
+                  </div>
+                </div>
+
+              </div>
+            )
+
+          }
+
+
         </div>
-      ))}
-    </div>
+      </div>
+    </>
   );
 }

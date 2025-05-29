@@ -1,8 +1,9 @@
 import { Outlet, useNavigation } from '@remix-run/react';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
 import { useEffect } from 'react';
 import NProgress from 'nprogress';
+import NavHeader from '~/components/nav-header';
 
 export default function RootLayout() {
   const navigation = useNavigation();
@@ -23,7 +24,7 @@ export default function RootLayout() {
       <SidebarProvider>
         <AppSidebar />
         <main className="w-full">
-          <SidebarTrigger />
+          <NavHeader></NavHeader>
           <div className="p-4 ">
             <div className="container">
               <Outlet />

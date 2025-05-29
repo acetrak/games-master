@@ -17,50 +17,31 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar';
+import { menuData } from '~/lib/data';
 
-// This is sample data.
-const data = {
-  versions: ['1.0.1', '1.1.0-alpha', '2.0.0-beta1'],
-  navMain: [
-    {
-      title: 'Getting Started',
-      url: '',
-      items: [
-        {
-          title: 'List of Deals',
-          url: '/list-of-deals',
-        },
-        {
-          title: 'Stores',
-          url: '/stores',
-        },
-      ],
-    },
-  ],
-};
+
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const location = useLocation();
- 
+
 
   return (
     <Sidebar {...props}>
       <SidebarHeader>
         <VersionSwitcher
-          versions={data.versions}
-          defaultVersion={data.versions[0]}
+          versions={menuData.versions}
+          defaultVersion={menuData.versions[0]}
         />
-        <SearchForm />
+
       </SidebarHeader>
       <SidebarContent>
-        {/* We create a SidebarGroup for each parent. */}
-        {data.navMain.map((item) => (
+        {menuData.navMain.map((item) => (
           <SidebarGroup key={item.title}>
             <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {item.items.map((item) => (
+                {item.items?.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={item.url === location.pathname}>
                       <Link to={item.url}>{item.title}</Link>
