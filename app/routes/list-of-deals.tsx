@@ -1,9 +1,11 @@
-import { Link, useLoaderData, useLocation } from '@remix-run/react';
+import { useLoaderData, useLocation } from '@remix-run/react';
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import qs from 'qs';
 import { GameDeal, Store } from '~/lib/data';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import SortBy from '~/components/sort-by';
+import * as motion from 'motion/react-client';
+import { Button } from '~/components/ui/button';
 
 export const meta: MetaFunction = () => {
   return [{ title: '游戏管家' }, { name: 'description', content: '游戏管家' }];
@@ -42,7 +44,16 @@ export default function Index() {
 
   const store = useMemo<Store>(() => location.state?.store ?? defaultStore, [location.state?.store]);
 
-  console.log(store);
+  const open = (  e: React.MouseEvent<HTMLButtonElement>,item: GameDeal) => {
+    e.preventDefault()
+    e.stopPropagation()
+    window.open(`https://www.cheapshark.com/redirect?dealID=${item.dealID}`, '_blank', 'noopener,noreferrer');
+  }
+
+  const visitDeal = (item: GameDeal) => {
+
+    console.log(item);
+  }
 
   return (
     <>
@@ -66,13 +77,13 @@ export default function Index() {
               </div>
             ) : (
 
-              <div className="grid grid-cols-[1fr_300px] gap-x-4">
+              <div className="grid grid-cols-1  xl:grid-cols-[1fr_300px] gap-x-8">
 
-                <div className="">
+                <div className="order-1 xl:order-0">
                   <div className="flex flex-col gap-y-6">
 
                     {data.map((item) => (
-                      <Link rel="noreferrer" target="_blank" to={`https://www.cheapshark.com/redirect?dealID=${item.dealID}`} key={item.dealID} className=" py-4 flex px-2 border-1 border-zinc-300 dark:border-zinc-600   cursor-pointer">
+                      <motion.div  onClick={()=>visitDeal(item)}   key={item.dealID} className=" py-4 flex px-2 border-1 border-zinc-300 dark:border-zinc-600   cursor-pointer">
 
                         <img src={item.thumb} alt="" className="w-[180px] shrink-0" />
                         <div className="flex-1 pl-3 flex flex-col justify-between">
@@ -84,13 +95,16 @@ export default function Index() {
                             <p className="bg-green-600 text-white px-1 py-[2px] text-xs rounded-sm">save: {Number(item.savings).toFixed(0)}%</p>
                           </div>
                         </div>
-                      </Link>
+                        <div className="ml-auto">
+                          <Button onClick={(e)=>open(e,item)}>go to shop</Button>
+                        </div>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
 
-                <div>
-                  <div className="sticky top-[120px]">
+                <div className="order-0 xl:order-1 pb-6 xl:pb-0">
+                  <div className=" xl:sticky xl:top-[120px]">
                     <h3 className="text-zinc-800 dark:text-zinc-300 pb-2">SortBy</h3>
                     <SortBy></SortBy>
                   </div>

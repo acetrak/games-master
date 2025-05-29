@@ -253,7 +253,7 @@ function SidebarTrigger({
       onClick?.(event);
       toggleSidebar();
     }}
-      {...props} className={cn(className, 'w-fit h-fit rounded-full transition-all p-1 lg:p-3 bg-zinc-300 dark:bg-zinc-700 cursor-pointer hover:bg-zinc-400 hover:dark:bg-zinc-900')}
+      {...props} className={cn(className, 'w-fit h-fit rounded-full transition-all p-1 lg:p-3  cursor-pointer hover:bg-zinc-400 hover:dark:bg-zinc-700')}
     >
       <PanelLeftIcon />
       <span className="sr-only">Toggle Sidebar</span>
