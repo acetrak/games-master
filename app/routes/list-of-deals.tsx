@@ -66,6 +66,7 @@ export default function Index() {
   console.log(location.state)
   return (
     <>
+    <Outlet/>
       <div className=" p-4">
 
         {
